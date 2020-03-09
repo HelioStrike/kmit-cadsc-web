@@ -1,0 +1,60 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    margin: 0;
+}
+
+.center-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.top-left {
+    align-self: flex-start;
+    left: 10vw;
+    top: 4vh;
+    position: absolute;
+}
+
+.heading {
+    font-size: 45px;
+}
+
+.med {
+    font-size: 24px;
+}
+
+.small {
+    font-size: 16px;
+}
+
+.small-img {
+    width: 50px;
+    height: 50px;
+}
+
+.small-margin {
+    margin: 16px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.white {
+    color: white;
+}
+
+.content {
+    padding: 5vh;
+}
