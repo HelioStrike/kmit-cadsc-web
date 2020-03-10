@@ -34,5 +34,10 @@
 
         <img class="full-width small-margin" src="{{ url_for('static',filename='images/episeg/episeg2.png') }}"/> <br/>
     </p>
+    <form method="post" action="/process-image" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="hidden" name="task" value="epithelium_segmentation">
+        <input type="submit" value="Upload">
+    </form>
 </div>
 {% include 'partials/footer.html' %}
