@@ -1,4 +1,5 @@
 from flask import Flask, flash, request, redirect, url_for, render_template
+from markupsafe import escape
 from werkzeug.utils import secure_filename
 import os
 
@@ -8,9 +9,10 @@ app = Flask(__name__)
 def home():
     return render_template('home.html')
 
-@app.route('/epithelium-segmentation')
-def epithelium_segmentation():
-    return render_template('epithelium_segmentation.html')
+@app.route('/tasks/<task>', methods=['GET'])
+def epithelium_segmentation(task):
+    task = escape(task)
+    return render_template('_'.join(task.split('-'))+'.html')
 
 ALLOWED_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'tif']
 
@@ -47,4 +49,4 @@ def upload_file():
             return fname
 
 if __name__=="__main__":
-    app.run(host="0.0.0.0", port="5010", debug=True)
+    app.run(host="0.0.0.0", port="5010")
