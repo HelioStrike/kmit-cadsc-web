@@ -4,6 +4,7 @@ import cv2
 from .model import build_model
 import os
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 INPUT_SHAPE = (960, 960, 3)
 WEIGHTS_PATH = './pipelines/epithelium_segmentation/weights/model.h5'
@@ -26,7 +27,6 @@ def postprocess(orig, pred):
     pred = cv2.dilate(pred, np.ones((3,3),np.uint8), iterations=1)
     pred = removeSmallConnectedComponents(pred, min_size=300)
     pred = remove_white(orig, pred)
-    pred = overlay_mask_boundaries(orig, pred)
     return pred
 
 def postprocessing(orig, im):
@@ -34,14 +34,32 @@ def postprocessing(orig, im):
         im = im.reshape(im.shape[:-1])
     return im
 
-def get_display_image(fname):
-    inp = np.array(Image.open(fname))
+def get_display_image(orig, mask):
+    inp = np.array(Image.open(orig))
+    mask = cv2.resize(np.array(Image.open(mask)), INPUT_SHAPE[:2])
     preprocessed = preprocess(inp)
     pred = run_model(preprocessed)
     postprocessed = postprocess(preprocessed, pred)
-    #print(postprocessed)
-    #plt.imshow(postprocessed)
-    #plt.show()
+    mask_overlay = overlay_mask_boundaries(preprocessed, mask)
+    pred_overlay = overlay_mask_boundaries(preprocessed, postprocessed)
+
+    fh = 30
+    fw = 15
+    imgs = [preprocessed, mask_overlay, pred_overlay]
+    titles = ['Original', 'Original Borders', 'Predicted Borders']
+    f, ax = plt.subplots(1, len(imgs), figsize=(fh,fw))
+    for i in range(len(imgs)):
+        ax[i].imshow(imgs[i])
+        if titles is not None:
+            ax[i].title.set_text(titles[i])
+            ax[i].title.set_size(20)
+    accuracy = np.sum(postprocessed == mask)/(INPUT_SHAPE[0]*INPUT_SHAPE[1])
+    ax[0].text(0.9, 0.5, 'Accuracy: ' + str(accuracy), fontsize=18, transform=plt.gcf().transFigure)
+    canvas = FigureCanvas(f)
+    canvas.draw()
+    ret = np.fromstring(canvas.tostring_rgb(), dtype='uint8').reshape(fw*100, fh*100, 3)
+
+    return ret
 
 def removeSmallConnectedComponents(img, min_size=50):
     if img.shape[-1] == 1:
