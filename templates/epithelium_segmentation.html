@@ -34,11 +34,19 @@
 
         <img class="full-width small-margin" src="{{ url_for('static',filename='images/episeg/episeg2.png') }}"/> <br/>
     </p>
-    <form method="post" action="/process-image" enctype="multipart/form-data">
-        <input type="file" name="orig">
-        <input type="file" name="mask">
+
+    <p class="heading center-content">Test it out!</p>
+    <form class="center-content" method="post" action="/process-image" enctype="multipart/form-data">
+        <div class="field">
+            <label class="med">Original Image: </label>
+            <input type="file" name="orig">
+        </div>
+        <div class="field small-margin">
+            <label class="med">Mask Image: </label>
+            <input type="file" name="mask">
+        </div>
         <input type="hidden" name="task" value="epithelium_segmentation">
-        <input type="submit" value="Upload">
+        <input class="ui primary button small-margin" type="submit" value="Go!">
     </form>
 </div>
 {% include 'partials/footer.html' %}
