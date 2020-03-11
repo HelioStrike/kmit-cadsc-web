@@ -3,6 +3,7 @@ import tensorflow.keras.backend as K
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Conv2D, Conv2DTranspose, MaxPooling2D, concatenate, Dropout
 
+#U-Net
 def build_model(input_shape, output_channels=1):
     inputs = Input(input_shape)
 

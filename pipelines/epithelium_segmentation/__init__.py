@@ -9,10 +9,12 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 INPUT_SHAPE = (960, 960, 3)
 WEIGHTS_PATH = './pipelines/epithelium_segmentation/weights/model.h5'
 
+#preprocess input image
 def preprocess(x):
     x = cv2.resize(x, INPUT_SHAPE[:2])
     return x
 
+#load model and run it on the input
 def run_model(x):
     model = build_model(INPUT_SHAPE)
     model.load_weights(WEIGHTS_PATH)
@@ -20,6 +22,7 @@ def run_model(x):
     pred = model.predict(x)
     return pred
 
+#postprocess predicted image
 def postprocess(orig, pred):
     pred[np.where(pred<=0.5)] = 0
     pred[np.where(pred>0.5)] = 1
@@ -29,11 +32,7 @@ def postprocess(orig, pred):
     pred = remove_white(orig, pred)
     return pred
 
-def postprocessing(orig, im):
-    if im.shape[-1] == 1:
-        im = im.reshape(im.shape[:-1])
-    return im
-
+#pass in the original and mask image, and get the image to be displayed on the website
 def get_display_image(orig, mask):
     inp = np.array(Image.open(orig))
     mask = cv2.resize(np.array(Image.open(mask)), INPUT_SHAPE[:2])
@@ -61,6 +60,7 @@ def get_display_image(orig, mask):
 
     return ret
 
+#self-explanatory
 def removeSmallConnectedComponents(img, min_size=50):
     if img.shape[-1] == 1:
         img = (img.reshape(*img.shape, 1)*255).astype(np.uint8)
@@ -74,7 +74,7 @@ def removeSmallConnectedComponents(img, min_size=50):
             img2[output == i + 1] = 1
     return img2
 
-#removes white stroma regions in the original image, from the mask image
+#removes white stroma regions present in the original image, from the respective mask image
 def remove_white(orig, mask):
     orig = orig.astype(np.uint8)
     if orig.shape[-1] != 1:

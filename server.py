@@ -8,6 +8,7 @@ import io
 
 app = Flask(__name__)
 
+#disable image caching
 @app.after_request
 def add_header(r):
     """
@@ -24,21 +25,24 @@ def add_header(r):
 def home():
     return render_template('home.html')
 
+#renders the main webpage of your task
 @app.route('/tasks/<task>', methods=['GET'])
-def epithelium_segmentation(task):
+def show_task(task):
     task = escape(task)
     return render_template('_'.join(task.split('-'))+'.html')
 
 ALLOWED_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'tif']
 
+#checks whether file in in the allowed image extensions
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGE_EXTENSIONS
 
+#this route processes the input image and returns the output image as a file
 @app.route('/process-image', methods=['POST'])
 def process_image():
     if request.form['task'] == 'epithelium_segmentation':
-        orig, mask = upload_file(['orig', 'mask'])
+        orig, mask = upload_files(['orig', 'mask'])
         lib = getattr(__import__('pipelines.'+request.form['task']), request.form['task'])
         display_image = lib.get_display_image(orig, mask)
         os.remove(orig)
@@ -49,7 +53,9 @@ def process_image():
     file_object.seek(0)
     return send_file(file_object, mimetype='image/PNG')
 
-def upload_file(fnames):
+#send in a list of names (as coded in the task's html page) of the expected files
+#and get the paths to which they are uploaded
+def upload_files(fnames):
     if request.method == 'POST':
         ret_names = []
         for fname in fnames:
@@ -69,5 +75,6 @@ def upload_file(fnames):
                 ret_names.append(fname)
         return ret_names
 
+#JUST DO IT!!!
 if __name__=="__main__":
     app.run(host="0.0.0.0", port="5010")

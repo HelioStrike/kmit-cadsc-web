@@ -8,6 +8,7 @@
             rgba(0, 0, 0, 0.3), 
             rgba(0, 0, 0, 0.5)
         ),
+        /* Might want to edit this. Add your own cover image */
         url('https://www.researchgate.net/profile/Giancarlo_Fortino/publication/312178339/figure/fig1/AS:451349818155008@1484621590589/H-E-stained-histology-slide-showing-perinuclear-halo-and-chicken-wire-like-vasculature.png');
         background-size: cover;
         background-repeat:no-repeat;
@@ -22,9 +23,11 @@
             Menu
         </button>
     </div>
+    <!-- Might want to edit this -->
     <p class="heading white">Epithelium Segmentation</p>
 </div>
 <div class="ui container center-content content">
+    <!-- Might want to edit this -->
     <p class="small">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Proin nibh nisl condimentum id. Sit amet facilisis magna etiam tempor orci eu. Congue quisque egestas diam in arcu cursus. Nunc sed augue lacus viverra vitae congue eu consequat. Varius vel pharetra vel turpis nunc. Egestas congue quisque egestas diam in arcu cursus euismod quis. Pulvinar mattis nunc sed blandit libero volutpat sed cras ornare. Amet est placerat in egestas. Nunc faucibus a pellentesque sit amet porttitor eget. Tincidunt nunc pulvinar sapien et ligula. Fermentum leo vel orci porta non pulvinar. Quam lacus suspendisse faucibus interdum posuere lorem ipsum. Libero nunc consequat interdum varius sit.
         
@@ -35,6 +38,11 @@
         <img class="full-width small-margin" src="{{ url_for('static',filename='images/episeg/episeg2.png') }}"/> <br/>
     </p>
 
+    <!-- 
+        Might want to edit this.
+        Your task may require a different number of inputs.
+        This can be changed here. The names given to inputs here are what you'll be retrieving in process_image in server.py.
+    -->
     <p class="heading center-content">Test it out!</p>
     <p class="small">Select an input image and its respective annotated mask to see how the model performs against the existing annotation.</p>
     <form class="center-content" method="post" action="/process-image" enctype="multipart/form-data">
