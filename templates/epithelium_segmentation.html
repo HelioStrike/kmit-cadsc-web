@@ -46,13 +46,9 @@
     <p class="heading center-content">Test it out!</p>
     <p class="small">Select an input image and its respective annotated mask to see how the model performs against the existing annotation.</p>
     <form class="center-content" method="post" action="/process-image" enctype="multipart/form-data">
-        <div class="field">
-            <label class="med">Original Image: </label>
-            <input type="file" name="orig">
-        </div>
         <div class="field small-margin">
-            <label class="med">Mask Image: </label>
-            <input type="file" name="mask">
+            <label class="med">Image: </label>
+            <input type="file" name="image">
         </div>
         <input type="hidden" name="task" value="epithelium_segmentation">
         <input class="ui primary button small-margin" type="submit" value="Go!">

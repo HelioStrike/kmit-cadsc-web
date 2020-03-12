@@ -33,27 +33,23 @@ def postprocess(orig, pred):
     return pred
 
 #pass in the original and mask image, and get the image to be displayed on the website
-def get_display_image(orig, mask):
+def get_display_image(orig):
     inp = np.array(Image.open(orig))
-    mask = cv2.resize(np.array(Image.open(mask)), INPUT_SHAPE[:2])
     preprocessed = preprocess(inp)
     pred = run_model(preprocessed)
     postprocessed = postprocess(preprocessed, pred)
-    mask_overlay = overlay_mask_boundaries(preprocessed, mask)
     pred_overlay = overlay_mask_boundaries(preprocessed, postprocessed)
 
     fh = 30
     fw = 15
-    imgs = [preprocessed, mask_overlay, pred_overlay]
-    titles = ['Original', 'Original Borders', 'Predicted Borders']
+    imgs = [preprocessed, pred_overlay]
+    titles = ['Original', 'Predicted Borders']
     f, ax = plt.subplots(1, len(imgs), figsize=(fh,fw))
     for i in range(len(imgs)):
         ax[i].imshow(imgs[i])
         if titles is not None:
             ax[i].title.set_text(titles[i])
             ax[i].title.set_size(20)
-    accuracy = np.sum(postprocessed == mask)/(INPUT_SHAPE[0]*INPUT_SHAPE[1])
-    ax[0].text(0.9, 0.5, 'Accuracy: ' + str(accuracy), fontsize=18, transform=plt.gcf().transFigure)
     canvas = FigureCanvas(f)
     canvas.draw()
     ret = np.fromstring(canvas.tostring_rgb(), dtype='uint8').reshape(fw*100, fh*100, 3)

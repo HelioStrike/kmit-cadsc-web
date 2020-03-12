@@ -42,11 +42,10 @@ def allowed_file(filename):
 @app.route('/process-image', methods=['POST'])
 def process_image():
     if request.form['task'] == 'epithelium_segmentation':
-        orig, mask = upload_files(['orig', 'mask'])
+        image = upload_files(['image'])[0]
         lib = getattr(__import__('pipelines.'+request.form['task']), request.form['task'])
-        display_image = lib.get_display_image(orig, mask)
-        os.remove(orig)
-        os.remove(mask)
+        display_image = lib.get_display_image(image)
+        os.remove(image)
     img = Image.fromarray(display_image.astype('uint8'))
     file_object = io.BytesIO()
     img.save(file_object, 'PNG')
