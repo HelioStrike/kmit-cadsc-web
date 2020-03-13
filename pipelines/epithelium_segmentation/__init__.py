@@ -40,6 +40,7 @@ def get_display_image(orig):
     postprocessed = postprocess(preprocessed, pred)
     pred_overlay = overlay_mask_boundaries(preprocessed, postprocessed)
 
+    #pred_view = np.stack([(pred*255).astype(np.uint8)]*3, axis=-1).reshape(INPUT_SHAPE)
     fh = 30
     fw = 15
     imgs = [preprocessed, pred_overlay]
