@@ -27,7 +27,7 @@ def postprocess(orig, pred):
     pred[np.where(pred<=0.5)] = 0
     pred[np.where(pred>0.5)] = 1
     pred = (pred.reshape(INPUT_SHAPE[:2])*255).astype(np.uint8)
-    pred = cv2.dilate(pred, np.ones((3,3),np.uint8), iterations=1)
+    pred = cv2.dilate(pred, np.ones((2,2),np.uint8), iterations=1)
     pred = removeSmallConnectedComponents(pred, min_size=300)
     pred = remove_white(orig, pred)
     return pred
@@ -45,15 +45,15 @@ def get_display_image(orig, mask):
     fh = 30
     fw = 15
     imgs = [preprocessed, mask_overlay, pred_overlay]
-    titles = ['Original', 'Original Borders', 'Predicted Borders']
+    titles = ['Original', 'Ground Truth Borders (Expert-annotated)', 'Predicted Borders']
     f, ax = plt.subplots(1, len(imgs), figsize=(fh,fw))
     for i in range(len(imgs)):
         ax[i].imshow(imgs[i])
         if titles is not None:
             ax[i].title.set_text(titles[i])
-            ax[i].title.set_size(20)
-    accuracy = np.sum(postprocessed == mask)/(INPUT_SHAPE[0]*INPUT_SHAPE[1])
-    ax[0].text(0.9, 0.5, 'Accuracy: ' + str(accuracy), fontsize=18, transform=plt.gcf().transFigure)
+            ax[i].title.set_size(30)
+    accuracy = np.sum(postprocessed == (mask/255))/(INPUT_SHAPE[0]*INPUT_SHAPE[1])
+    ax[0].text(0.9, 0.5, 'Accuracy: ' + str(accuracy), fontsize=20, transform=plt.gcf().transFigure)
     canvas = FigureCanvas(f)
     canvas.draw()
     ret = np.fromstring(canvas.tostring_rgb(), dtype='uint8').reshape(fw*100, fh*100, 3)
@@ -98,5 +98,5 @@ def overlay_mask_boundaries(orig, mask):
     for_boundary[:,-2:] = 0
     _, contours, hierarchy = cv2.findContours(for_boundary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     boundary_image = orig.copy()
-    cv2.drawContours(boundary_image, contours, -1, (0, 255, 0), 4)
+    cv2.drawContours(boundary_image, contours, -1, (0, 255, 0), 6)
     return boundary_image
