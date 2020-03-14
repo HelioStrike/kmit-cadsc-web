@@ -1055,7 +1055,7 @@ C.use_vertical_flips = False
 C.rot_90 = False
 
 # Load the records
-record_df = pd.read_csv(C.record_path)
+record_df = pd.read_csv('pipelines/mammography/model/record.csv')
 
 r_epochs = len(record_df)
 
@@ -1130,8 +1130,8 @@ model_classifier_only = Model([feature_map_input, roi_input], classifier)
 model_classifier = Model([feature_map_input, roi_input], classifier)
 
 print('Loading weights from {}'.format(C.model_path))
-model_rpn.load_weights(C.model_path, by_name=True)
-model_classifier.load_weights(C.model_path, by_name=True)
+model_rpn.load_weights('pipelines/mammography/model/model_frcnn_vgg.hdf5', by_name=True)
+model_classifier.load_weights('pipelines/mammography/model/model_frcnn_vgg.hdf5', by_name=True)
 
 model_rpn.compile(optimizer='sgd', loss='mse')
 model_classifier.compile(optimizer='sgd', loss='mse')
@@ -1506,4 +1506,3 @@ print('After training %dk batches, the mean average precision is %0.3f'%(len(rec
 # record_df.to_csv(C.record_path, index=0)
 # print('Save mAP to {}'.format(C.record_path))
 '''
-
