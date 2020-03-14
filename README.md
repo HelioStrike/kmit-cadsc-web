@@ -1,10 +1,12 @@
 # kmit-cadsc-web
 
-## WATCH OUT. WORK IN PROGRESS!!!
-
 A showcase of the work (being) done in the KMIT CADSC project.
 
+# Running Instructions
+
 To view the website, simply run `python3 server.py` and then go to `http://localhost:5010`.
+
+- Before running the mammography pipeline download the weights of vgg16(the base layer) [here](https://drive.google.com/file/d/1ln0PRgP0ElZKgoUalSwkKE7TvSR801RH/view?usp=sharing) and the weights of our(network) [here](https://drive.google.com/file/d/1-94kNV9t6NVDC1nC6ULB4Kwwe5bKusL5/view?usp=sharing) and paste it in `pipelines/mammography/model`.
 
 # For colleagues working on the project
 
