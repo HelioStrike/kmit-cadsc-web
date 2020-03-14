@@ -93,7 +93,7 @@ def overlay_mask_boundaries(orig, mask):
     for_boundary[-2:,:] = 0
     for_boundary[:,:2] = 0
     for_boundary[:,-2:] = 0
-    _, contours, hierarchy = cv2.findContours(for_boundary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(for_boundary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     boundary_image = orig.copy()
     cv2.drawContours(boundary_image, contours, -1, (0, 255, 0), 4)
     return boundary_image
