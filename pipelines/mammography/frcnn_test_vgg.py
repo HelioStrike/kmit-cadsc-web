@@ -1129,9 +1129,10 @@ model_classifier_only = Model([feature_map_input, roi_input], classifier)
 
 model_classifier = Model([feature_map_input, roi_input], classifier)
 
-print('Loading weights from {}'.format(C.model_path))
-model_rpn.load_weights('pipelines/mammography/model/model_frcnn_vgg.hdf5', by_name=True)
-model_classifier.load_weights('pipelines/mammography/model/model_frcnn_vgg.hdf5', by_name=True)
+model_path = 'pipelines/mammography/model/model_frcnn_vgg.hdf5'
+print('Loading weights from {}'.format(model_path))
+model_rpn.load_weights(model_path, by_name=True)
+model_classifier.load_weights(model_path, by_name=True)
 
 model_rpn.compile(optimizer='sgd', loss='mse')
 model_classifier.compile(optimizer='sgd', loss='mse')
@@ -1164,9 +1165,10 @@ bbox_threshold = 0.1
     #print(img_name)
     #st = time.time()
     #filepath = os.path.join(test_base_path, img_name)
-def predictt(img):
+def predictt(img,img_name):
     #img = cv2.imread(filepath)
-
+    
+    
     X, ratio = format_img(img, C)
     
     X = np.transpose(X, (0, 2, 3, 1))
@@ -1269,6 +1271,21 @@ def predictt(img):
             cv2.rectangle(img, (textOrg[0] - 5, textOrg[1]+baseLine - 5), (textOrg[0]+retval[0] + 5, textOrg[1]-retval[1] - 5), (0, 0, 0), 1)
             cv2.rectangle(img, (textOrg[0] - 5,textOrg[1]+baseLine - 5), (textOrg[0]+retval[0] + 5, textOrg[1]-retval[1] - 5), (255, 255, 255), -1)
             cv2.putText(img, textLabel, textOrg, cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 1)
+
+    gt_data= pd.read_csv(os.getcwd()+'/pipelines/mammography/annotations.txt',sep=",",header=None)
+    gt_data=gt_data.set_index(0).T.to_dict('list')
+    print("**********",gt_data)
+    original_xmin,original_ymin,original_xmax,original_ymax,original_class=gt_data[img_name]
+    print(original_xmin,original_ymin,original_xmax,original_ymax,original_class)
+    print(type(original_xmax))
+    
+    #original_xmin,original_ymin,original_xmax,original_ymax,original_class=gt_data[test_base_path+img_name]
+    cv2.rectangle(img,(original_xmin,original_ymin),(original_xmax,original_ymax),(0,255,0),4)
+    textgt = (original_xmin,original_ymin-0)
+    (retval,baseLine) = cv2.getTextSize(original_class,cv2.FONT_HERSHEY_COMPLEX,1,1)
+    cv2.rectangle(img,(textgt[0]-5,textgt[1]+baseLine-5),(textgt[0]+retval[0] + 5, textgt[1]-retval[1] - 5),(0,0,0),1)
+    cv2.rectangle(img, (textgt[0] - 5,textgt[1]+baseLine - 5), (textgt[0]+retval[0] + 5, textgt[1]-retval[1] - 5), (255, 255, 255), -1)
+    cv2.putText(img, original_class, textgt, cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 0), 1)
 
     #print('Elapsed time = {}'.format(time.time() - st))
     ##print(all_dets)

@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Results</title>
+       <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+</head>
+<body style="background-color:black">
+
+<h1><span class="blue"></span>LymphNode Metastasis<span class="blue"></h1>
+
+{% set l=predicted.split(",") %}
+
+    {% if predicted | length > 1 %}
+  
+        <table class="container">
+            <thead>
+             <tr> <td>ImageName</td> <td>Input Image </td> <td>Actual Result </td> <td> Predicted Result </td>
+             </tr>
+             </thead> 	
+            {% set i=0 %}
+	    
+	    <tbody>
+            {% for img_name in filename %}
+                <tr height="110px" width="100px">
+                    <td>{{img_name}}</td>
+			
+                    <td><img src="{{img_name}}" style="width:120px;height:120px;" type="image/png"> </td>
+
+                    {% set result=l[i].split(" ") %}
+                    <td style="font-weight:bold"> {{ result[0]}}  </td>
+                    <td style="font-weight:bold"> {{result[1]}} {{result[2]}}%  {{ result[3]}}% </td>    
+		    {% set i=i+1 %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        No results :(
+    {% endif %}
+</body>
+</html>

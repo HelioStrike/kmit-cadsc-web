@@ -9,5 +9,5 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 #pass in the original and mask image, and get the image to be displayed on the website
 def get_display_image(orig):
     inp = np.array(Image.open(orig))
-    pred=predictt(inp)
+    pred=predictt(inp,orig.split("/")[1])
     return pred

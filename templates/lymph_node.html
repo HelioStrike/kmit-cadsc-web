@@ -1,0 +1,58 @@
+{% include 'partials/header.html' %}
+<style>
+    #maindiv {
+        width: 100vw;
+        height: 40vh;
+        background: 
+        linear-gradient(
+            rgba(0, 0, 0, 0.3), 
+            rgba(0, 0, 0, 0.5)
+        ),
+        /* Might want to edit this. Add your own cover image */
+        url('https://www.researchgate.net/profile/Giancarlo_Fortino/publication/312178339/figure/fig1/AS:451349818155008@1484621590589/H-E-stained-histology-slide-showing-perinuclear-halo-and-chicken-wire-like-vasculature.png');
+        background-size: cover;
+        background-repeat:no-repeat;
+        background-position: center center;
+    }
+</style>
+<div class="center-content" id="maindiv">
+    <div class="med white top-left row">
+        <a href="/"><img class="small-img" src="https://img.collegedekhocdn.com/media/img/institute/logo/1442139279.jpg" /></a>
+        <button class="ui inverted button" id="menubtn">
+            <i class="fas fa-bars"></i>
+            Menu
+        </button>
+    </div>
+    <!-- Might want to edit this -->
+    <p class="heading white">Lymph Node Metastatis</p>
+</div>
+<div class="ui container center-content content">
+    <!-- Might want to edit this -->
+    <p class="small">
+     
+      Lymph nodes are tiny round or oval organs found all over your body, and they are connected through a complex system of lymphatic channels. They function to help the body fight infection via white blood cells. They act as filters of anything that should not be in the body, including cancer cells. Metastatic lymph nodes are those that have cancer cells within them (spread from a primary tumor somewhere else).
+
+Lymphatic spread of cancer in the head and neck region results in enlarged lymph nodes in the face or neck (these are called regional lymph nodes because they are in the region of the head and neck).
+       
+        <img class="full-width small-margin" src="{{ url_for('static',filename='images/lymph_node/Lymph-node.png') }}"/> <br/>
+ <br/>
+    </p>
+
+    <!-- 
+        Might want to edit this.
+        Your task may require a different number of inputs.
+        This can be changed here. The names given to inputs here are what you'll be retrieving in process_image in server.py.
+    -->
+    <p class="heading center-content">Test it out!</p>
+    <p class="small center-content">Select an input image to predict</p>
+    <form class="center-content" method="post" action="/process-lymph-image" enctype="multipart/form-data">
+        <div class="field small-margin">
+            <label class="med">Original Image: </label>
+            <input type="file" name="orig">
+        </div>
+        
+        <input type="hidden" name="task" value="lymph_node">
+        <input class="ui primary button small-margin" type="submit" value="Go!">
+    </form>
+</div>
+{% include 'partials/footer.html' %}
