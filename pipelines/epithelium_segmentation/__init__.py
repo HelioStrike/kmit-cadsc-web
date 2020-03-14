@@ -33,24 +33,27 @@ def postprocess(orig, pred):
     return pred
 
 #pass in the original and mask image, and get the image to be displayed on the website
-def get_display_image(orig):
+def get_display_image(orig, mask):
     inp = np.array(Image.open(orig))
+    mask = cv2.resize(np.array(Image.open(mask)), INPUT_SHAPE[:2])
     preprocessed = preprocess(inp)
     pred = run_model(preprocessed)
     postprocessed = postprocess(preprocessed, pred)
+    mask_overlay = overlay_mask_boundaries(preprocessed, mask)
     pred_overlay = overlay_mask_boundaries(preprocessed, postprocessed)
 
-    #pred_view = np.stack([(pred*255).astype(np.uint8)]*3, axis=-1).reshape(INPUT_SHAPE)
     fh = 30
     fw = 15
-    imgs = [preprocessed, pred_overlay]
-    titles = ['Original', 'Predicted Borders']
+    imgs = [preprocessed, mask_overlay, pred_overlay]
+    titles = ['Original', 'Original Borders', 'Predicted Borders']
     f, ax = plt.subplots(1, len(imgs), figsize=(fh,fw))
     for i in range(len(imgs)):
         ax[i].imshow(imgs[i])
         if titles is not None:
             ax[i].title.set_text(titles[i])
             ax[i].title.set_size(20)
+    accuracy = np.sum(postprocessed == mask)/(INPUT_SHAPE[0]*INPUT_SHAPE[1])
+    ax[0].text(0.9, 0.5, 'Accuracy: ' + str(accuracy), fontsize=18, transform=plt.gcf().transFigure)
     canvas = FigureCanvas(f)
     canvas.draw()
     ret = np.fromstring(canvas.tostring_rgb(), dtype='uint8').reshape(fw*100, fh*100, 3)
@@ -93,7 +96,7 @@ def overlay_mask_boundaries(orig, mask):
     for_boundary[-2:,:] = 0
     for_boundary[:,:2] = 0
     for_boundary[:,-2:] = 0
-    contours, hierarchy = cv2.findContours(for_boundary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    _, contours, hierarchy = cv2.findContours(for_boundary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     boundary_image = orig.copy()
     cv2.drawContours(boundary_image, contours, -1, (0, 255, 0), 4)
     return boundary_image

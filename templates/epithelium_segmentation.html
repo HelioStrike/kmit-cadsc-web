@@ -41,11 +41,15 @@
         This can be changed here. The names given to inputs here are what you'll be retrieving in process_image in server.py.
     -->
     <p class="heading center-content">Test it out!</p>
-    <p class="small center-content">Select an input image.</p>
+    <p class="small center-content">Select an input image, and its respective ground truth image.</p>
     <form class="center-content" method="post" action="/process-image" enctype="multipart/form-data">
+        <div class="field">
+            <label class="med">Original Image: </label>
+            <input type="file" name="orig">
+        </div>
         <div class="field small-margin">
-            <label class="med">Image: </label>
-            <input type="file" name="image">
+            <label class="med">Mask Image: </label>
+            <input type="file" name="mask">
         </div>
         <input type="hidden" name="task" value="epithelium_segmentation">
         <input class="ui primary button small-margin" type="submit" value="Go!">
