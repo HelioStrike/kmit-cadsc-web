@@ -1,0 +1,62 @@
+{% include 'partials/header.html' %}
+<style>
+    #maindiv {
+        width: 100vw;
+        height: 40vh;
+        background: 
+        linear-gradient(
+            rgba(0, 0, 0, 0.3), 
+            rgba(0, 0, 0, 0.5)
+        ),
+        /* Might want to edit this. Add your own cover image */
+        url('https://static01.nyt.com/images/2020/01/01/science/01AICancer-1/merlin_166501161_6096cd8e-69c4-4eaa-b44a-644f031287db-jumbo.jpg?quality=90&auto=webp');
+        background-size: cover;
+        background-repeat:no-repeat;
+        background-position: center center;
+    }
+</style>
+<div class="center-content" id="maindiv">
+    <div class="med white top-left row">
+        <a href="/"><img class="small-img" src="https://img.collegedekhocdn.com/media/img/institute/logo/1442139279.jpg" /></a>
+        <button class="ui inverted button" id="menubtn">
+            <i class="fas fa-bars"></i>
+            Menu
+        </button>
+    </div>
+    <!-- Might want to edit this -->
+    <p class="heading white">Mammography</p>
+</div>
+<div class="ui container center-content content">
+    <!-- Might want to edit this -->
+    <p class="small">
+        A mammogram is an x-ray picture of the breast. It can be used to check for breast cancer in women who have no signs or symptoms of the disease. It can also be used if you have a lump or other sign of breast cancer.The goal of mammography is the early detection of breast cancer, typically through detection of characteristic masses or microcalcifications.
+        Mammograms can be used to check for breast cancer in women who have no signs or symptoms of the disease. This type of mammogram is called a screening mammogram. Screening mammograms usually involve two or more x-ray pictures, or images, of each breast. The x-ray images often make it possible to detect tumors that cannot be felt. Screening mammograms can also find microcalcifications (tiny deposits of calcium) that sometimes indicate the presence of breast cancer.
+
+	Mammograms can also be used to check for breast cancer after a lump or other sign or symptom of the disease has been found. This type of mammogram is called a diagnostic mammogram. Besides a lump, signs of breast cancer can include breast pain, thickening of the skin of the breast, nipple discharge, or a change in breast size or shape; however, these signs may also be signs of benign conditions. A diagnostic mammogram can also be used to evaluate changes found during a screening mammogram or to view breast tissue when it is difficult to obtain a screening mammogram because of special circumstances, such as the presence of breast implants.
+	Early detection of breast cancer with screening mammography means that treatment can be started earlier in the course of the disease, possibly before it has spread. Results from randomized clinical trials and other studies show that screening mammography can help reduce the number of deaths from breast cancer among women ages 40 to 74, especially for those over age 50. 
+        <img class="full-width small-margin" src="{{ url_for('static',filename='images/mammo/image.png') }}"/><br/>
+
+        In the above shown images the green box is ground truth i.e., the position of the lesion in the mammogram given by the doctors.The red box represents the position of the lesion which our network predicted.And our network even predicts the type of the lesions which are either malignant or benign with some probability score(probability of being maligant or benin).
+	In the figure mdb028.png, according to the ground truths which are present, the lesion is malignant and our network predicted it correctly as malignant with 98% probability.
+	In the figure mdb314.png, the ground truths of the lesion says it as benin and our network predicted it correctly as benin with 96% probability.
+
+        <!--img class="full-width small-margin" src="{{ url_for('static',filename='images/mammo/mammo1.png') }}"/--> <br/>
+    </p>
+
+    <!--  
+        Might want to edit this.
+        Your task may require a different number of inputs.
+        This can be changed here. The names given to inputs here are what you'll be retrieving in process_image in server.py.
+    -->
+    <p class="heading center-content">Test it out!</p>
+    <p style="text-align: center;" class="small">Select an input image to see how the model performs and detects the lesions.</p>
+    <form class="center-content" method="post" action="/process-image" enctype="multipart/form-data">
+        <div class="field small-margin">
+            <label class="med">Image: </label>
+            <input type="file" name="image">
+        </div>
+        <input type="hidden" name="task" value="mammography">
+        <input class="ui primary button small-margin" type="submit" value="Go!">
+    </form>
+</div>
+{% include 'partials/footer.html' %}
